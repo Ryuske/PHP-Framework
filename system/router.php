@@ -166,7 +166,9 @@ class router
   public function call_404(&$controller=NULL, $type=NULL)
   {
     if ((is_readable($this->_fileName) || is_readable($this->_sharedName)) || isset($controller) && $type !== 'view') {
-      if (is_callable(array($controller, $this->_routeAction)) || (class_exists($controller) && is_callable(array(new $this->_routeController($this->system_di), $this->_routeAction)))) {
+
+      //Check to see if the requested page is an existing method. May have to add is_callable() at some point - however that errors when trying to call an uninitialized method/view
+      if (method_exists($controller, $this->_routeAction) || (class_exists($controller) && method_exists(new $this->_routeController($this->system_di), $this->_routeAction))) {
         return false;
       } else {
         $this->_fileName = $this->_controllerPath . DIRECTORY_SEPARATOR . 'main.php';
