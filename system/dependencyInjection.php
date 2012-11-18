@@ -1,7 +1,7 @@
 <?php
 /**
  * @Author: Kenyon Haliwell
- * @URL: http://battleborndevelopment.com/
+ * @URL: http://khdev.net/
  * @Date Created: 2/21/11
  * @Date Modified: 3/5/11
  * @Purpose: Used to store and retrieve object references
@@ -21,7 +21,7 @@
  *
  *  Using get() to retrieve object
  *      $japanese_greetings = $system_di->get('Japanese Greetings');
- *      
+ *
  */
 class dependencyInjection
 {
@@ -31,21 +31,21 @@ class dependencyInjection
      * @Static
      */
     private static $_storeObjects;
-    
+
     /**
      * @Purpose: Private constructor: Only allow 1 instance
      * @Access: Private
      * @Final
      */
     final private function __construct() {}
-    
+
     /**
      * @Purpose: Disallow cloning of dependencyInjection
      * @Access: Private
      * @Final
      */
     final private function __clone() {}
-    
+
     /**
      * @Purpose: Initialize unique instance of $_storeObjects
      * @Access: Public
@@ -57,10 +57,10 @@ class dependencyInjection
         if (NULL === self::$_storeObjects) {
             self::$_storeObjects = new self();
         }
-        
+
         return self::$_storeObjects;
     }//End initialize
-    
+
     /**
      * @Purpose: Set a new object using $key as the key
      * @Param: string $key
@@ -73,7 +73,7 @@ class dependencyInjection
         $instance = self::initialize();
         $instance->$key = $object;
     }//End set
-    
+
     /**
      * @Purpose: Get the object referenced by $key
      * @Param: string $key
@@ -84,7 +84,7 @@ class dependencyInjection
     {
         return array_key_exists($key, $instance) ? $instance->$key : NULL;
     }//End get
-    
+
     /**
      * @Purpose: Used for debugging, print out everything stored in $_storeObjects
      * @Access: Public

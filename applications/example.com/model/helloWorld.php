@@ -1,7 +1,7 @@
 <?php
 /**
  * @Author: Kenyon Haliwell
- * @URL: http://battleborndevelopment.com/
+ * @URL: http://khdev.net/
  * @Date Created: 2/22/11
  * @Date Modified: 2/22/11
  * @Purpose: To show an example of a model

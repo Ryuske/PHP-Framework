@@ -1,7 +1,7 @@
 <?php
 /**
  * @Author: Kenyon Haliwell
- * @URL: http://battleborndevelopment.com/
+ * @URL: http://khdev.net/
  * @Date Created: 2/20/11
  * @Date Modified: 3/5/11
  * @Purpose: Shared Site Configurations

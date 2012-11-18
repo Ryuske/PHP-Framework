@@ -1,7 +1,7 @@
 <?php
 /**
  * @Author: Kenyon Haliwell
- * @URL: http://battleborndevelopment.com/
+ * @URL: http://khdev.net/
  * @Date Created: 2/21/11
  * @Date Modified: 3/5/11
  * @Purpose: Replaces PHPs error handling for all E_ level errors
@@ -26,7 +26,7 @@ class error
     * @Access: Public
     */
     public $system_di;
-    
+
     /**
     * @Purpose: Load dependencyInjector into scope
     * @Access: Public
@@ -35,7 +35,7 @@ class error
     {
         $this->system_di = $system_di;
     }//End __construct
-    
+
     /**
     * @Purpose: Allow debug_print_backtrace() to be used in a string
     * @Access: Public
@@ -55,7 +55,7 @@ class error
 
         return $trace;
     }//End debug_string_backtrace
-    
+
     /**
     * @Purpose: Used to replace PHPs error handler
     * @Param: int $errno
@@ -83,12 +83,12 @@ class error
             '8192' => 'E_DEPRECATED',
             '16384' => 'E_USER_DEPRECATED',
             '30719' => 'E_ALL'
-            
+
         );
 
         echo '<div><span style="font-style: italic">' . $error_numbers[$errno] . ': in ' . $errfile . ' on line ' . $errline . '.</span> ' . $errstr . '</div><br /><br />';
     }//End handle_error
-    
+
     /**
     * @Purpose: Report the error, called by handle_error()
     * @Param: string $error_message
@@ -106,7 +106,7 @@ class error
             return $this->email_error($error_message, $error_type);
         }
     }//End trigger_error
-    
+
     /**
     * @Purpose: Email the error if __PROJECT_ENVIRONMENT is set to production
     * @Param: string $error_message
@@ -119,12 +119,12 @@ class error
         if (!$this->system_di->config->email_errors) {
             return false;
         }
-        
+
         $to = $this->system_di->config->admin_name . ' <' . $this->system_di->config->admin_email . '>';
         $subject = 'Error (' . $_SERVER['HTTP_HOST'] . '): ' . htmlentities($error_type, ENT_QUOTES, 'UTF-8', false);
         $email_body = '<fieldset class="system_alert"><legend>' . $error_type . ' Error</legend><pre>' . htmlentities($error_message, ENT_QUOTES, 'UTF-8', false) . '<hr /><h4>PHP Backtrace</h4>' . print_r(debug_backtrace(), true) . '<hr /><h4>PHP Functions Backtrace</h4>' . $this->debug_string_backtrace() . '</pre></fieldset>';
         $headers = "Content-Type: text/html; charset=UTF-8\r\nFrom: " . $this->system_di->config->errors_from . " <" . $this->system_di->config->errors_from_email . ">";
-        
+
         if (mail($to, $subject, $email_body, $headers)) {
             return true;
         } else {

@@ -1,7 +1,7 @@
 <?php
 /**
  * @Author: Kenyon Haliwell
- * @URL: http://battleborndevelopment.com/
+ * @URL: http://khdev.net/
  * @Date Created: 2/21/11
  * @Date Modified: 2/22/11
  * @Purpose: Used to display user defined errors. By default it will display a 404 error.

@@ -1,7 +1,7 @@
 <?php
 /**
  * @Author: Kenyon Haliwell
- * @URL: http://battleborndevelopment.com/
+ * @URL: http://khdev.net/
  * @Date Created: 2/22/11
  * @Date Modified: 4/08/11
  * @Purpose: Template class used to parse views
@@ -27,13 +27,13 @@ class template
     * @Access: Public
     */
     public $system_di;
-    
+
     /**
     * @Var: Array
     * @Access: Private
     */
     private $_variables = array();
-    
+
     /**
     * @Purpose: Load dependencyInjector into scope
     * @Param: object $system_di
@@ -43,7 +43,7 @@ class template
     {
         $this->system_di = $system_di;
     }//End __construct
-    
+
     /**
      * @Purpose: Enables object-like ability to set variables
      * @Param: string $key
@@ -54,7 +54,7 @@ class template
     {
         $this->_variables[$key] = $value;
     }//End __set
-    
+
     /**
     * @Purpose: Parse the view
     * @Param: string $view
@@ -66,7 +66,7 @@ class template
     {
         $view = str_replace('_', DIRECTORY_SEPARATOR, $view);
         $path_to_view = __SITE_PATH . 'view' . DIRECTORY_SEPARATOR . $view . '.php';
-        
+
         if (!is_readable($path_to_view)) {
             $path_to_shared_view = __APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . $view . '.php';
             if (!is_readable($path_to_shared_view)) {
@@ -77,24 +77,24 @@ class template
                 $path_to_view = $path_to_shared_view;
             }
         }
-        
+
         if (!isset($_404)) {
           foreach($this->_variables as $key => $value) {
               $$key = $value;
               $tokens[] = $key;
           }
-          
+
           ob_start();
           include_once $path_to_view;
           $view_contents = ob_get_contents();
           ob_end_clean();
-          
+
           if (!empty($tokens)) {
               foreach ($tokens as $token) {
                   $view_contents = str_replace('{' . $token . '}', (string)$$token, $view_contents);
               }
           }
-          
+
           if (true === $return) {
               return $view_contents;
           } else {
