@@ -1,0 +1,94 @@
++++ Index +++
+I. About
+II. Installation
+III. Terminology
+IV. Standards
+V. TODO
+
++++ About +++
+Author: Kenyon Haliwell
+URL: http://battleborndevelopment.com/
+Version: 1.1
+
+This framework was created to be very small, flexible and portable. It uses PHP5 coding standards.
+In addition to being small and flexible, it is designed to be a framework and only a framework. It is not
+designed to be a Content Management System, or anything of the like, only a framework.
+
++++ Installation +++
+Instructions on installation will go here later.
+
++++ Terminology +++
+URL (Uniform Resource Locator): This is the domain (i.e. http://google.com)
+URI (Uniform Resource Identifier): This is the file path (i.e. /some/file.php)
+Taxonomy: The art of classification (taxis meaning order or arrangement; nomos meaning law or science)
+Taxa: Taxonomic units
+Taxon: Singular taxa
+
+Use all terminology appropriately! A URL is *NOT* the same as a URI!!
+
++++ Standards +++
+PHP Should generally abide by PHP5 Standards unless otherwise started (http://pear.php.net/manual/en/).
+All files should be properly tabulated.
+Tabulation should use spaces over tabs. 2 spaces.
+HTML should also be tabulated, each tag should be tabulated correspondingly.
+
+PHP files should omit the closing PHP tag (?>) if the file would normally be ending there and instead replaced with
+the comment //End File and exactly one blank space past that
+
+Never use shortcode PHP: <?=$var?> should be <?php echo $var; ?>
+
+Ternary PHP is acceptable.
+
+When doing logical comparison, the variable should always be to the right (i.e. 'large' == $size; 1 > $number). This way if you forget
+an equals sign, it will error instead of returning true.
+
+Classes should start lowercase, and words be separated by uppercase (i.e. myClass)*
+Models should be prefixed with model_ and start lowercase, and words be seperated by uppercase (i.e. model_myModel)*
+Functions should be all lowercase, and words be separated by an underscore (i.e. my_function())
+Variables should also be lowercase and separated by an underscore (i.e. $some_var)
+Globals should be all uppercase, start with a double underscore, and words be separated by an underscore(i.e. __GLOBAL_FUNCTION)
+System variables are denoted with system_ (i.e. $system_di would be the variables for the Dependency Injector)
+
+File names should be the same as the class name
+If you wish to have directories under controller, model or view, they need to be formatted the same way as a class. (i.e. myFolder)
+*Classes and models under a folder should be named like this (myFolder_fileName)
+
+Variables defined in a class but outside of a function should precede with an underscore and words be separated by
+uppercase (i.e. private $_someVar), unless you're extending viability of an already existing variable (i.e. private $system_di)
+
+All code should be commented to easily be able to tell where a function starts, ends, and anything than can not be
+deciphered at a quick glance should also be commented.
+Classes and functions should end with a comment in the following manner: //End <class/function name>
+
+The only PHP that should exist in views is tokens ({some token}) or simple statements (if, switch, for, etc)
+
+All PHP files should have the following at the very top:
+/**
+ * @Author: Author name
+ * @URL: URL of author or project
+ * @Date Created: Date the file was created (month/day/year, 2/20/11)
+ * @Date Modified: The date the file was last modified (same as @Date Created)
+ * @Purpose: Purpose of the file
+ * @Version: The version of the file, somewhere there should be a change log. Either here, in a txt file or on your website
+ *
+ * Extra commentary if needed.
+ */
+
+All PHP classes and functions should be commented as following:
+/**
+ * @Purpose: Purpose of the class/function (unless it's a variable, then omit)
+ * @Param: <type, i.e. string, object, integer, etc) <variable, i.e. $somevar)
+ * @Var: <type, i.e. string, int, object, etc>
+ * @Access: Public, Private, etc
+ * @<Extra options, i.e. Static, Final, Abstract etc)
+ * @Return: What is expected to return once the function has completed (i.e. <Boolean, string, etc> <what causes the condition>)
+ *
+ * Extra commentary if needed. *note* @Param and $Var should not both be used together. @Param is for functions, @Var is used for defining variables.
+ */
+ 
+To get URI taxonomy (taxa) to work, make sure .htaccess is installed and Apache can access it.
+ 
+ +++ TODO +++
+ Change controller main.php to home.php
+ Add some form of tokens/shorthand for if...else and switch statements(?)
+ Rename /applications to /application
