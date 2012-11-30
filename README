@@ -87,8 +87,3 @@ All PHP classes and functions should be commented as following:
  */
  
 To get URI taxonomy (taxa) to work, make sure .htaccess is installed and Apache can access it.
- 
- +++ TODO +++
- Change controller main.php to home.php
- Add some form of tokens/shorthand for if...else and switch statements(?)
- Rename /applications to /application
