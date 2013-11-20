@@ -3,7 +3,7 @@
  * @Author: Kenyon Haliwell
  * @URL: http://khdev.net/
  * @Date Created: 2/22/11
- * @Date Modified: 4/08/11
+ * @Date Modified: 11/18/13
  * @Purpose: Template class used to parse views
  * @Version: 1.1.1
  */
@@ -54,6 +54,19 @@ class template
     {
         $this->_variables[$key] = $value;
     }//End __set
+
+    /**
+     * @Purpose: Enabled object-like ability to get variables
+     * @Param: string $key
+     * @Acess: Public
+     */
+    public function __get($key) {
+        if (array_key_exists($key, $this->_variables)) {    
+            return $this->_variables[$key];
+        }
+        
+        return '';
+    } //End __get
 
     /**
     * @Purpose: Parse the view

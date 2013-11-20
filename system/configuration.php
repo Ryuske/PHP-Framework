@@ -3,7 +3,7 @@
  * @Author: Kenyon Haliwell
  * @URL: http://khdev.net/
  * @Date Created: 2/20/11
- * @Date Modified: 3/5/11
+ * @Date Modified: 11/13/13
  * @Purpose: Implements site configurations into objects usable by the framework
  * @Version: 1.0
  */
@@ -28,28 +28,28 @@ class configuration
      * @Access: Private
      * @Static
      */
-    private static $_configInstance;
+    public static $_configInstance;
 
     /**
      * @Var: String
      * @Access: Private
      * @Static
      */
-    private static $_configFile;
+    public static $_configFile;
 
     /**
      * @Var: Array
      * @Access: Private
      * @Static
      */
-    private static $_configValues;
+    public static $_configValues;
 
     /**
-     * @Purpose: Private constructor: only allow 1 instance
+     * @Purpose: Privare constructor: only allow 1 instance
      * @Access: Private
      * @Final
      */
-    final private function __construct()
+    public final function __construct()
     {
         $shared_configValues = __CONFIG_PATH . 'shared.php';
         $site_configValues = __CONFIG_PATH . self::$_configFile . '.php';
@@ -63,7 +63,6 @@ class configuration
         } else {
             $site_configValues = array();
         }
-
         if (is_array($shared_configValues) || is_array($site_configValues) ) {
             self::$_configValues = array_merge($shared_configValues, $site_configValues);
         } else {
@@ -110,9 +109,10 @@ class configuration
     /**
      * @Purpose: Set the path location of the config file
      * @Access: Public
+     * @Access: Static
      * @Return: True
      */
-    public function set_file($file_name)
+    public static function set_file($file_name)
     {
         self::$_configFile = $file_name;
         return true;

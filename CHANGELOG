@@ -1,4 +1,7 @@
----Commit Changelog---1
+---Commit Changelog---
+11/18/2013 - Commit 1
+    Fixed general issues with Databasing and Templates
+
 11/18/2012 - Commit 2
     Fixed some issues with the /plugins directory & not commiting plugins
     Fixed issue when seeing if an uninitialized view exists. /system/router.php:171

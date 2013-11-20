@@ -3,7 +3,7 @@
  * @Author: Kenyon Haliwell
  * @URL: http://khdev.net/
  * @Date Created: 3/4/11
- * @Date Modified: 3/5/11
+ * @Date Modified: 11/14/13
  * @Purpose: Handle database connections
  * @Version: 1.0
  *
@@ -90,25 +90,27 @@ class db
                     if (is_array($value)) {
                         switch (count($value)) {
                         case 1:
-                            $prepared_statement->bindParam($binding, $value['value']);
+                            $prepared_statement->bindValue($binding, $value['value']);
                             break;
                         case 2:
-                            $prepared_statement->bindParam($binding, $value['value'], $value['dataType']);
+                            $prepared_statement->bindValue($binding, $value['value'], $value['dataType']);
                             break;
                         case 3:
-                            $prepared_statement->bindParam($binding, $value['value'], $value['dataType'], (int)$value['length']);
+                            $prepared_statement->bindValue($binding, $value['value'], $value['dataType'], (int)$value['length']);
                             break;
                         default:
                             $this->system_di->error->trigger_error('There was an error with the query bindings', 'Database');
                             break;
                         }
                     } else {
-                        $prepared_statement->bindParam($binding, $value);
+                        $prepared_statement->bindValue($binding, $value);
                     }
                 }
 
                 $prepared_statement->execute();
-                return $prepared_statement->fetchAll();
+                if (strtolower(substr($query, 0, 6)) === 'select') {
+                    return $prepared_statement->fetchAll();
+                }
             } elseif(strtolower(substr($query, 0, 6)) === 'select') {
                 $fetch_rows = $this->_storeDB->query($query);
                 return $fetch_rows->fetchAll();

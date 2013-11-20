@@ -92,3 +92,6 @@ To get URI taxonomy (taxa) to work, make sure .htaccess is installed and Apache 
  Change controller main.php to home.php
  Add some form of tokens/shorthand for if...else and switch statements(?)
  Rename /applications to /application
+ Create documentation on how classes are supposed to work
+ Get array tokens to work {something['koala']}
+ Document error handling better
