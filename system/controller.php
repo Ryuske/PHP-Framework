@@ -3,7 +3,7 @@
  * @Author: Kenyon Haliwell
  * @URL: http://khdev.net/
  * @Date Created: 2/21/11
- * @Date Modified: 3/5/11
+ * @Date Modified: 11/21/13
  * @Purpose: Controller class; used for loading models
  * @Version: 1.0
  */
@@ -39,12 +39,16 @@ abstract class controller
     /**
     * @Purpose: Used to load models into the controller
     * @Param: string $model
+    * @Param: string $path
     * @Access: Public
     * @Return: The model class as an object
     */
-    public function load_model($model)
+    public function load_model($model, $path='')
     {
         $model_path = str_replace('_', DIRECTORY_SEPARATOR, $model);
+        if (!empty($path)) {
+            $model_path = $path . DIRECTORY_SEPARATOR . $model_path;
+        }
         $site_model = __SITE_PATH . 'model' . DIRECTORY_SEPARATOR . $model_path . '.php';
         $shared_model = __APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'model' . DIRECTORY_SEPARATOR . $model_path . '.php';
 
