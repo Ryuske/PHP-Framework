@@ -1,3 +1,7 @@
+11/26/13 - Commit 1
+    Fixed an issue with router.php where if your controller wasn't in a directory it wouldn't work
+    Fixed a couple other issues in router.php
+
 11/25/13 - Commit 1
     Refactored system/router.php->get_router()
 

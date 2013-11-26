@@ -108,7 +108,7 @@ class router
     if (!empty($_GET['route'])) {
       $route = $_GET['route'];
     } else {
-      $route = 'index';
+      $route = '';
     }
     
     $home_aliases = array('', 'home', 'index', 'main');
@@ -116,6 +116,7 @@ class router
     $route_build = explode('/', (string) $route);
     
     $directory = array_shift($route_build);
+
     //Checks to see if the first route is a directory or not
     if (
         !is_dir($this->_controllerPath . DIRECTORY_SEPARATOR . $directory)
@@ -150,8 +151,12 @@ class router
     //Make blank methods, 'index', 'home' & 'main' all take you to the home page
     $method = (in_array($method, $home_aliases)) ? 'index': $method;
     $parameters = $route_build;
-    
-    $this->_routeController = $directory . DIRECTORY_SEPARATOR . $class;
+    /*echo 'Dir: ' . $directory . '<br />';
+    echo 'Class: ' . $class . '<br />';
+    echo 'Method: ' . $method . '<br />';
+    echo 'Params: ' . $parameters . '<br />';
+    die();*/
+    $this->_routeController = (empty($directory)) ? $class : $directory . DIRECTORY_SEPARATOR . $class;
     $this->_routeAction = $method;
     $this->_routeArguments = $parameters;
     
@@ -201,7 +206,7 @@ class router
   */
   public function call_404(&$controller=NULL, $type=NULL)
   {
-    $controller = str_replace('/', '_', $controller);
+    $controller = (!is_object($controller)) ? str_replace('/', '_', $controller) : $controller;
     
     if ((is_readable($this->_fileName) || is_readable($this->_sharedName)) || isset($controller) && $type !== 'view') {
       //Check to see if the requested page is an existing method. May have to add is_callable() at some point - however that errors when trying to call an uninitialized method/view
@@ -212,8 +217,10 @@ class router
         if (!is_readable($this->_fileName)) {
           //$this->_sharedName = __APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . 'main.php';
           
-          if (!is_readable($this->_fileName)) {
+          if (!is_readable($this->_fileName) /*&& is_readable($this->_sharedName)*/) {
             include_once $this->_sharedName;
+          } else {
+            return true;
           }
         } else {
           include_once $this->_fileName;
@@ -277,9 +284,9 @@ class router
       }
     }
     
-    /*if (!$this->call_404($controller)) {
+    if (!$this->call_404($controller)) {
       $this->set_missing_arguments($controller);
-    }*/
+    }
 
     if (empty($this->_routeArguments)) {
       call_user_func(array($controller, $this->_routeAction), NULL);
