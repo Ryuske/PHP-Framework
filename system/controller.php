@@ -3,7 +3,7 @@
  * @Author: Kenyon Haliwell
  * @URL: http://khdev.net/
  * @Date Created: 2/21/11
- * @Date Modified: 11/21/13
+ * @Date Modified: 11/22/13
  * @Purpose: Controller class; used for loading models
  * @Version: 1.0
  */
@@ -57,7 +57,7 @@ abstract class controller
         } elseif (is_readable($shared_model)) {
             include_once $shared_model;
         } else {
-            $this->system_di->error->trigger_error('Cannot load model (' . $model_path . '). Unable to read: ' . $site_path . ' or ' . $shared_model, 'Model');
+            $this->system_di->error->trigger_error('Cannot load model (' . $model_path . '). Unable to read: ' . $site_model . ' or ' . $shared_model, 'Model');
         }
 
         $model_class = 'model_' . $model;
@@ -69,6 +69,18 @@ abstract class controller
      * @Abstract
      */
     abstract function index();
+    
+    /**
+     * @Purpose: Disable controllers from using the method name main since it is an alias of index
+     * @Final
+     */
+    final function main() {}
+    
+    /**
+     * @Purpose: Disable controllers from using the method name home since it is an alias of index
+     * @Final
+     */
+    final function home() {}
 }//End controller
 
 //End File

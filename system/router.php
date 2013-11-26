@@ -3,7 +3,7 @@
 * @Author: Kenyon Haliwell
 * @URL: http://khdev.net/
 * @Date Created: 2/21/11
-* @Date Modified: 7/22/11
+* @Date Modified: 11/21/13
 * @Purpose: Used to load the appropriate controller
 * @Version: 1.1.2
 */
@@ -95,32 +95,68 @@ class router
   */
   private function get_route()
   {
+    /**** Logic ****
+     *
+     *  if first is class or directory
+     *      if first is class, two is method
+     *      if first is directory two is class/directory and class could be the same???
+     *  else first is method
+     *      two would be parameters
+     *
+     ***************/
+    
     if (!empty($_GET['route'])) {
       $route = $_GET['route'];
     } else {
-      $route = 'main';
+      $route = 'index';
     }
-
-    $route_build = explode('/', (string)$route);
-    $this->_routeController = array_shift($route_build);
-
-    $this->_routeController = preg_replace('/\/{1}$/', '', $this->_routeController);
-    while (is_dir($this->_controllerPath . DIRECTORY_SEPARATOR . $this->_routeController . DIRECTORY_SEPARATOR) || is_dir(__APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . $this->_routeController . DIRECTORY_SEPARATOR)) {
-      $this->_routeController = $this->_routeController . '_' . array_shift($route_build);
+    
+    $home_aliases = array('', 'home', 'index', 'main');
+    $route = preg_replace('/\/{1}$/', '', $route); //Removes trailing / if it exists; Trailing backslash creates odd behavior
+    $route_build = explode('/', (string) $route);
+    
+    $directory = array_shift($route_build);
+    //Checks to see if the first route is a directory or not
+    if (
+        !is_dir($this->_controllerPath . DIRECTORY_SEPARATOR . $directory)
+        && !is_dir(__APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . $directory)
+    ) {
+        $class = $directory;
+    } else { //If it was a directory, then loop through until we find the end of the directories
+        foreach ($route_build as $next_in_route) {
+            if (
+                is_dir($this->_controllerPath . DIRECTORY_SEPARATOR . $directory . DIRECTORY_SEPARATOR . $next_in_route)
+                || is_dir(__APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . $directory . DIRECTORY_SEPARATOR . $next_in_route)
+            ) {
+                $directory .= DIRECTORY_SEPARATOR . array_shift($route_build);
+            }
+        }
+        $class = array_shift($route_build);
     }
-
-    $this->_routeAction = array_shift($route_build);
-    $this->_routeArguments = $route_build;
-
-    if (empty($this->_routeController) || substr($this->_routeController, -1) === '_') {
-      $this->_routeController = $this->_routeController . 'main';
+    
+    if ( //Check to see if $class is actually a class, or if it's a method
+        !is_readable($this->_controllerPath . DIRECTORY_SEPARATOR . $directory . DIRECTORY_SEPARATOR . $class . '.php')
+        && !is_readable(__APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . $directory . DIRECTORY_SEPARATOR . $class . '.php')
+    ) {
+        $method = $class;
+        $class = 'main';
+    } else {
+        if (in_array($class, $home_aliases)) {
+            $method = 'index';
+        } else {
+            $method = array_shift($route_build);
+        }
     }
-    if (empty($this->_routeAction)) {
-      $this->_routeAction = 'index';
-    }
-
-    $this->_fileName = $this->_controllerPath . DIRECTORY_SEPARATOR . str_replace('_', DIRECTORY_SEPARATOR, $this->_routeController) . '.php';
-    $this->_sharedName = __APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . str_replace('_', DIRECTORY_SEPARATOR, $this->_routeController) . '.php';
+    //Make blank methods, 'index', 'home' & 'main' all take you to the home page
+    $method = (in_array($method, $home_aliases)) ? 'index': $method;
+    $parameters = $route_build;
+    
+    $this->_routeController = $directory . DIRECTORY_SEPARATOR . $class;
+    $this->_routeAction = $method;
+    $this->_routeArguments = $parameters;
+    
+    $this->_fileName = $this->_controllerPath . DIRECTORY_SEPARATOR . $this->_routeController . '.php';
+    $this->_sharedName = __APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . $this->_routeController . '.php';
   }//End get_route
 
   /**
@@ -150,7 +186,7 @@ class router
         $this->_route_arguments[] = NULL;
       }
     }
-
+    
     return true;
   }//End set_missing_arguments
 
@@ -165,22 +201,25 @@ class router
   */
   public function call_404(&$controller=NULL, $type=NULL)
   {
+    $controller = str_replace('/', '_', $controller);
+    
     if ((is_readable($this->_fileName) || is_readable($this->_sharedName)) || isset($controller) && $type !== 'view') {
-
       //Check to see if the requested page is an existing method. May have to add is_callable() at some point - however that errors when trying to call an uninitialized method/view
-      if (method_exists($controller, $this->_routeAction) || (class_exists($controller) && method_exists(new $this->_routeController($this->system_di), $this->_routeAction))) {
+      if (is_object($controller) || method_exists($controller, $this->_routeAction) || (class_exists($controller) && method_exists(new $this->_routeController($this->system_di), $this->_routeAction))) {
         return false;
       } else {
-        $this->_fileName = $this->_controllerPath . DIRECTORY_SEPARATOR . 'main.php';
+        //$this->_fileName = $this->_controllerPath . DIRECTORY_SEPARATOR . 'main.php';
         if (!is_readable($this->_fileName)) {
-          $this->_sharedName = __APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . 'main.php';
+          //$this->_sharedName = __APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . 'main.php';
+          
           if (!is_readable($this->_fileName)) {
             include_once $this->_sharedName;
           }
         } else {
           include_once $this->_fileName;
         }
-        if (is_callable(array(new main($this->system_di), $this->_routeController))) {
+        
+        if (class_exists('main') && is_callable(array(new main($this->system_di), $this->_routeController))) {
           $this->_routeArguments = array_merge((array) $this->_routeAction, $this->_routeArguments);
           $this->_routeAction = $this->_routeController;
           $this->_routeController = 'main';
@@ -226,6 +265,7 @@ class router
   {
     if ($action !== 'skip_to_view') {
       $this->get_route();
+      
       if (is_readable($this->_fileName)) {
         include_once $this->_fileName;
       } elseif(is_readable($this->_sharedName)) {
@@ -236,10 +276,10 @@ class router
         $controller = new $this->_routeController($this->system_di);
       }
     }
-
-    if (!$this->call_404($controller)) {
+    
+    /*if (!$this->call_404($controller)) {
       $this->set_missing_arguments($controller);
-    }
+    }*/
 
     if (empty($this->_routeArguments)) {
       call_user_func(array($controller, $this->_routeAction), NULL);

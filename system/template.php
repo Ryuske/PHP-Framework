@@ -3,7 +3,7 @@
  * @Author: Kenyon Haliwell
  * @URL: http://khdev.net/
  * @Date Created: 2/22/11
- * @Date Modified: 11/18/13
+ * @Date Modified: 11/22/13
  * @Purpose: Template class used to parse views
  * @Version: 1.1.1
  */
@@ -104,7 +104,9 @@ class template
 
           if (!empty($tokens)) {
               foreach ($tokens as $token) {
-                  $view_contents = str_replace('{' . $token . '}', (string)$$token, $view_contents);
+                  if (!is_object($$token)) {
+                    $view_contents = str_replace('{' . $token . '}', (string)$$token, $view_contents);
+                  }
               }
           }
 
