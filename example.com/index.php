@@ -3,7 +3,7 @@
  * @Author: Kenyon Haliwell
  * @URL: http://khdev.net/
  * @Date Created: 3/5/11
- * @Date Modified: 3/5/11
+ * @Date Modified: 11/26/13
  * @Purpose: Front Controller
  * @Version: 1.0
  *
@@ -20,6 +20,8 @@ define('__PROJECT_ENVIRONMENT', 'dev');
 
 /**
  * Define the base path to the framework
+ * Should look something like /var/www/framework (i.e. the framework *SHOULD NOT* be in a web accessible directory)
+ * This is the only file that should be web accessible (aside from assets, like js/css/images)
  */
 define('__BASE_PATH', DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR);
 
