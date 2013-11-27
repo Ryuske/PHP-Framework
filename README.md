@@ -26,12 +26,14 @@
     copy, not move, shared.php to mysite.com.php and under mysite.com.php you're going to update the
     settings to reflect your actual information.
     
-    After that, you're ready to go. You should be able to go to mysite.com and you should see "Hello World".
+    After that, you're ready to go. You should be able to go to mysite.com and you should see
+    "Hello World".
 
 # Terminology #
     URL (Uniform Resource Locator): This is the domain (i.e. http://google.com)
     URI (Uniform Resource Identifier): This is the file path (i.e. /some/file.php)
-    Taxonomy: The art of classification (taxis meaning order or arrangement; nomos meaning law or science)
+    Taxonomy:   The art of classification (taxis meaning order or arrangement;
+                nomos meaning law or science)
     Taxa: Taxonomic units
     Taxon: Singular taxa
     
