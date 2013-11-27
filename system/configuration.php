@@ -3,9 +3,9 @@
  * @Author: Kenyon Haliwell
  * @URL: http://khdev.net/
  * @Date Created: 2/20/11
- * @Date Modified: 11/13/13
+ * @Date Modified: 11/27/13
  * @Purpose: Implements site configurations into objects usable by the framework
- * @Version: 1.0
+ * @Version: 2
  */
 
 /**

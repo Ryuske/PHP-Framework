@@ -3,9 +3,9 @@
 * @Author: Kenyon Haliwell
 * @URL: http://khdev.net/
 * @Date Created: 2/21/11
-* @Date Modified: 11/21/13
+* @Date Modified: 11/27/13
 * @Purpose: Used to load the appropriate controller
-* @Version: 1.1.2
+* @Version: 2
 */
 
 /**
@@ -140,7 +140,7 @@ class router
         && !is_readable(__APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . $directory . DIRECTORY_SEPARATOR . $class . '.php')
     ) {
         $method = $class;
-        $class = 'main';
+        $class = 'home';
     } else {
         if (in_array($class, $home_aliases)) {
             $method = 'index';
@@ -206,7 +206,7 @@ class router
   */
   public function call_404(&$controller=NULL, $type=NULL)
   {
-    $controller = (!is_object($controller)) ? str_replace('/', '_', $controller) : $controller;
+    $controller = (is_string($controller)) ? str_replace('/', '_', $controller) : $controller;
     
     if ((is_readable($this->_fileName) || is_readable($this->_sharedName)) || isset($controller) && $type !== 'view') {
       //Check to see if the requested page is an existing method. May have to add is_callable() at some point - however that errors when trying to call an uninitialized method/view
@@ -226,10 +226,10 @@ class router
           include_once $this->_fileName;
         }
         
-        if (class_exists('main') && is_callable(array(new main($this->system_di), $this->_routeController))) {
+        if (class_exists('home') && is_callable(array(new main($this->system_di), $this->_routeController))) {
           $this->_routeArguments = array_merge((array) $this->_routeAction, $this->_routeArguments);
           $this->_routeAction = $this->_routeController;
-          $this->_routeController = 'main';
+          $this->_routeController = 'home';
           return false;
         }
       }

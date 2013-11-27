@@ -3,9 +3,9 @@
  * @Author: Kenyon Haliwell
  * @URL: http://khdev.net/
  * @Date Created: 2/21/11
- * @Date Modified: 3/5/11
+ * @Date Modified: 11/27/13
  * @Purpose: Used to store and retrieve object references
- * @Version: 1.0
+ * @Version: 2
  */
 
 /**
