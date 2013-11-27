@@ -14,10 +14,10 @@
  * USAGE:
  *  Enabling it
  *      set_error_handler(array('error', 'handle_error'));
- *      $system_di->error = new error;
+ *      $sys->error = new error;
  *
  *  Throw an error
- *      $system_di->error->trigger_error('Some error', 'Error Category');
+ *      $sys->error->trigger_error('Some error', 'Error Category');
  */
 class error
 {
@@ -25,15 +25,16 @@ class error
     * @Var: Object
     * @Access: Public
     */
-    public $system_di;
+    public $sys;
 
     /**
     * @Purpose: Load dependencyInjector into scope
     * @Access: Public
     */
-    public function __construct($system_di)
+    public function __construct()
     {
-        $this->system_di = $system_di;
+        global $sys;
+        $this->sys = $sys;
     }//End __construct
 
     /**
@@ -116,14 +117,14 @@ class error
     */
     public function email_error($error_message, $error_type)
     {
-        if (!$this->system_di->config->email_errors) {
+        if (!$this->sys->config->email_errors) {
             return false;
         }
 
-        $to = $this->system_di->config->admin_name . ' <' . $this->system_di->config->admin_email . '>';
+        $to = $this->sys->config->admin_name . ' <' . $this->sys->config->admin_email . '>';
         $subject = 'Error (' . $_SERVER['HTTP_HOST'] . '): ' . htmlentities($error_type, ENT_QUOTES, 'UTF-8', false);
         $email_body = '<fieldset class="system_alert"><legend>' . $error_type . ' Error</legend><pre>' . htmlentities($error_message, ENT_QUOTES, 'UTF-8', false) . '<hr /><h4>PHP Backtrace</h4>' . print_r(debug_backtrace(), true) . '<hr /><h4>PHP Functions Backtrace</h4>' . $this->debug_string_backtrace() . '</pre></fieldset>';
-        $headers = "Content-Type: text/html; charset=UTF-8\r\nFrom: " . $this->system_di->config->errors_from . " <" . $this->system_di->config->errors_from_email . ">";
+        $headers = "Content-Type: text/html; charset=UTF-8\r\nFrom: " . $this->sys->config->errors_from . " <" . $this->sys->config->errors_from_email . ">";
 
         if (mail($to, $subject, $email_body, $headers)) {
             return true;

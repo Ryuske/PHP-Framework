@@ -70,48 +70,48 @@ require_once 'functions.php';
 /**
  * Initialize dependencyInjection
  */
-$system_di = dependencyInjection::initialize();
+$sys = dependencyInjection::initialize();
 
 
 /**
  * Initialize site configuration
  */
 configuration::set_file($_SERVER['HTTP_HOST']);
-$system_di->config = configuration::initialize();
+$sys->config = configuration::initialize();
 
 /**
  * Initialize error handling
  */
 set_error_handler(array('error', 'handle_error'));
-$system_di->error = new error($system_di);
+$sys->error = new error();
 /**
  * Initialize sessions
  */
 session_start();
-$system_di->session = &$_SESSION;
+$sys->session = &$_SESSION;
 
 /**
  * Initialize the router
  */
-$system_di->router = new router($system_di);
+$sys->router = new router();
 /**
  * Initialize controller path
  */
-$system_di->router->controller_path(__SITE_PATH . 'controller');
+$sys->router->controller_path(__SITE_PATH . 'controller');
 
 /**
  * Initialize the template
  */
-$system_di->template = new template($system_di);
+$sys->template = new template();
 
 /**
  * Load the route
  */
-$system_di->router->load_route();
+$sys->router->load_route();
 
 /**
  * Load the database handler
  */
-$system_di->db = new db($system_di);
+$sys->db = new db();
 
 //End File

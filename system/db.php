@@ -15,7 +15,7 @@
  *
  * USAGE:
  *  initialize the router
- *      $system_di->db = new db($system_di);
+ *      $sys->db = new db($sys);
  *
  * 	$results = Db::query('SELECT * FROM users WHERE username=:user AND email=:email', array('user' => $user, 'email' => $email));
  *
@@ -27,7 +27,7 @@ class db
     * @Var: Object
     * @Access: Public
     */
-    public $system_di;
+    public $sys;
 
     /**
      * @Var Object
@@ -37,13 +37,14 @@ class db
 
     /**
      * @Purpose: Load dependencyInjector into scope; Only allow 1 instance
-     * @Param: object $system_di
+     * @Param: object $sys
      * @Access: Public
      * @Final
      */
-    final public function __construct($system_di)
+    final public function __construct()
     {
-        $this->system_di = $system_di;
+        global $sys;
+        $this->sys = $sys;
         $this->initialize();
     }//End __construct
 
@@ -63,10 +64,10 @@ class db
     {
         if (NULL === $this->_storeDB) {
             try {
-                $this->_storeDB = new PDO('mysql:host=' . $this->system_di->config->mysql_host . ';port=' . $this->system_di->config->mysql_port . ';dbname=' . $this->system_di->config->mysql_database, $this->system_di->config->mysql_username, $this->system_di->config->mysql_password);
+                $this->_storeDB = new PDO('mysql:host=' . $this->sys->config->mysql_host . ';port=' . $this->sys->config->mysql_port . ';dbname=' . $this->sys->config->mysql_database, $this->sys->config->mysql_username, $this->sys->config->mysql_password);
                 $this->_storeDB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
             } catch(PDOException $e) {
-                $this->system_di->error->trigger_error($e->getMessage(), 'Database');
+                $sys->error->trigger_error($e->getMessage(), 'Database');
             }
         }
 
@@ -99,7 +100,7 @@ class db
                             $prepared_statement->bindValue($binding, $value['value'], $value['dataType'], (int)$value['length']);
                             break;
                         default:
-                            $this->system_di->error->trigger_error('There was an error with the query bindings', 'Database');
+                            $sys->error->trigger_error('There was an error with the query bindings', 'Database');
                             break;
                         }
                     } else {
@@ -118,7 +119,7 @@ class db
                 return $this->_storeDB->exec($query);
             }
         } catch (PDOException $e) {
-            $this->system_di->error->trigger_error($e->getMessage(), 'Database');
+            $sys->error->trigger_error($e->getMessage(), 'Database');
         }
     }//End query
 

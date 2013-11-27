@@ -14,13 +14,13 @@
  * USAGE:
  *  Creating a new injection
  *      $data = array('Greetings' => array('ohayo', 'konnichiwa', 'oyasumi'));
- *      $system_di = dependencyInjection::initialize();
+ *      $sys = dependencyInjection::initialize();
  *
  *  Using set() to store object
- *      $system_di->set('Japanese Greetings', $data);
+ *      $sys->set('Japanese Greetings', $data);
  *
  *  Using get() to retrieve object
- *      $japanese_greetings = $system_di->get('Japanese Greetings');
+ *      $japanese_greetings = $sys->get('Japanese Greetings');
  *
  */
 class dependencyInjection

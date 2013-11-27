@@ -1,3 +1,7 @@
+### 11/27/13 - Commit 5 ###
+* Rename $system_di to $sys
+* Changed the way $sys is passed to new classes. Hopefully reducing the RECURSIVE array deal on dumps
+
 ### 11/27/13 - Commit 2-4 ###
 * Worked on README.md formatting
 

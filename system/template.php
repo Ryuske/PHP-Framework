@@ -13,10 +13,10 @@
  *
  * USAGE:
  *  Initializing template
- *      $system_di->template = new template($system_di);
+ *      $sys->template = new template($sys);
  *
  *  Storing & retrieving variables to template
- *      $system_di->template->somevar = 'Some value';
+ *      $sys->template->somevar = 'Some value';
  *      To access somevar in a view, use {somevar}
  *      *note* {somevar} does NOT need to be wrapped in PHP
  */
@@ -26,7 +26,7 @@ class template
     * @Var: Object
     * @Access: Public
     */
-    public $system_di;
+    public $sys;
 
     /**
     * @Var: Array
@@ -36,12 +36,13 @@ class template
 
     /**
     * @Purpose: Load dependencyInjector into scope
-    * @Param: object $system_di
+    * @Param: object $sys
     * @Access: Public
     */
-    public function __construct($system_di)
+    public function __construct()
     {
-        $this->system_di = $system_di;
+        global $sys;
+        $this->sys = $sys;
     }//End __construct
 
     /**
@@ -84,7 +85,7 @@ class template
             $path_to_shared_view = __APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . $view . '.php';
             if (!is_readable($path_to_shared_view)) {
                 $pseudo_controller = NULL;
-                $this->system_di->router->call_404($pseudo_controller, 'view');
+                $this->sys->router->call_404($pseudo_controller, 'view');
                 $_404 = true;
             } else {
                 $path_to_view = $path_to_shared_view;

@@ -13,13 +13,13 @@
 *
 * USAGE:
 *  initialize the router
-*      $system_di->router = new router($system_di);
+*      $sys->router = new router($sys);
 *
 *  initialize the controller path
-*      $system_di->router->controller_path(__SITE_PATH . 'controller');
+*      $sys->router->controller_path(__SITE_PATH . 'controller');
 *
 *  Load the route to the controller
-*      $system_di->router->load_route();
+*      $sys->router->load_route();
 */
 class router
 {
@@ -27,7 +27,7 @@ class router
   * @Var: Object
   * @Access: Public
   */
-  public $system_di;
+  public $sys;
 
   /**
   * @Var: String
@@ -67,12 +67,13 @@ class router
 
   /**
   * @Purpose: Load dependencyInjector into scope
-  * @Param: object $system_di
+  * @Param: object $sys
   * @Access: Public
   */
-  public function __construct($system_di)
+  public function __construct()
   {
-    $this->system_di = $system_di;
+    global $sys;
+    $this->sys = $sys;
   }//End __construct
 
   /**
@@ -83,7 +84,7 @@ class router
   public function controller_path($controller_path)
   {
     if (!is_dir($controller_path)) {
-    $this->system_di->error->trigger_error('Controller path not found: ' . $controller_path, 'Router');
+    $this->sys->error->trigger_error('Controller path not found: ' . $controller_path, 'Router');
     }
 
     $this->_controllerPath = $controller_path;
@@ -210,7 +211,7 @@ class router
     
     if ((is_readable($this->_fileName) || is_readable($this->_sharedName)) || isset($controller) && $type !== 'view') {
       //Check to see if the requested page is an existing method. May have to add is_callable() at some point - however that errors when trying to call an uninitialized method/view
-      if (is_object($controller) || method_exists($controller, $this->_routeAction) || (class_exists($controller) && method_exists(new $this->_routeController($this->system_di), $this->_routeAction))) {
+      if (is_object($controller) || method_exists($controller, $this->_routeAction) || (class_exists($controller) && method_exists(new $this->_routeController($this->sys), $this->_routeAction))) {
         return false;
       } else {
         //$this->_fileName = $this->_controllerPath . DIRECTORY_SEPARATOR . 'main.php';
@@ -226,7 +227,7 @@ class router
           include_once $this->_fileName;
         }
         
-        if (class_exists('home') && is_callable(array(new main($this->system_di), $this->_routeController))) {
+        if (class_exists('home') && is_callable(array(new main($this->sys), $this->_routeController))) {
           $this->_routeArguments = array_merge((array) $this->_routeAction, $this->_routeArguments);
           $this->_routeAction = $this->_routeController;
           $this->_routeController = 'home';
@@ -249,7 +250,7 @@ class router
     } elseif (is_readable($this->_sharedName)) {
       include_once $this->_sharedName;
     } else {
-      $error = $this->system_di->error->trigger_error('Cannot get 404 page. Unable to read: ' . $this->_fileName . ' or ' . $this->_sharedName, 'Router');
+      $error = $this->sys->error->trigger_error('Cannot get 404 page. Unable to read: ' . $this->_fileName . ' or ' . $this->_sharedName, 'Router');
     }
 
     if ($type === 'view') {
@@ -259,7 +260,7 @@ class router
     if(isset($error)) {
       return true;
     } else {
-      $controller = new $this->_routeController($this->system_di);
+      $controller = new $this->_routeController($this->sys);
       return false;
     }
   }//End call_404
@@ -280,7 +281,7 @@ class router
       }
 
       if (!$this->call_404($this->_routeController)) {
-        $controller = new $this->_routeController($this->system_di);
+        $controller = new $this->_routeController($this->sys);
       }
     }
     

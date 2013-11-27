@@ -24,16 +24,16 @@ abstract class controller
     * @Var: Object
     * @Access: Protected
     */
-    protected $system_di;
+    protected $sys;
 
     /**
     * @Purpose: Load dependencyInjector into scope
-    * @Param: object $system_di
+    * @Param: object $sys
     * @Access: Public
     */
-    public function __construct($system_di)
+    public function __construct($sys)
     {
-        $this->system_di = $system_di;
+        $this->sys = $sys;
     }//End __construct
 
     /**
@@ -57,7 +57,7 @@ abstract class controller
         } elseif (is_readable($shared_model)) {
             include_once $shared_model;
         } else {
-            $this->system_di->error->trigger_error('Cannot load model (' . $model_path . '). Unable to read: ' . $site_model . ' or ' . $shared_model, 'Model');
+            $this->sys->error->trigger_error('Cannot load model (' . $model_path . '). Unable to read: ' . $site_model . ' or ' . $shared_model, 'Model');
         }
 
         $model_class = 'model_' . $model;

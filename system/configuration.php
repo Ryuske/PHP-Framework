@@ -13,10 +13,10 @@
  *
  * USAGE:
  *  Initializing the configs
- *      $system_di->config = configuration::initialize();
+ *      $sys->config = configuration::initialize();
  *
  *  Getting values
- *      echo $system_di->config->some_value;
+ *      echo $sys->config->some_value;
  *
  *  TODO: Add support for multidimensional arrays
  */
