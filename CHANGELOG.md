@@ -1,7 +1,4 @@
-### 11/27/13 - Commit 3 ###
-* Worked on README.md formatting
-
-### 11/27/13 - Commit 2 ###
+### 11/27/13 - Commit 2-4 ###
 * Worked on README.md formatting
 
 ### 11/27/13 - Commit 1 ###

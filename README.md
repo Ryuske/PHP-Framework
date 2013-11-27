@@ -15,9 +15,10 @@
 
 # Installation #
     Installing the framework is fairly simple. All you have to do is extract the framework somewhere
-    non-web accessible. So for example, /var/www/framework and then you're going to move example.com to
-    /var/www/mysite.com and you'll have to update line 25 on /var/www/mysite.com/index.php to reflect
-    where ever you put it. Try and keep the same format that's there already, just with the correct path.
+    non-web accessible. So for example, /var/www/framework and then you're going to move example.com
+    to /var/www/mysite.com and you'll have to update line 25 on /var/www/mysite.com/index.php to
+    reflect where ever you put it. Try and keep the same format that's there already, just with the
+    correct path.
     
     Once you've done that you're going to have to go to your root framework directory (<framework_root>
     is what we'll call it). You're going to move <framework_root>/htaccess_example to
