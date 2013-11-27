@@ -1,3 +1,6 @@
+### 11/27/13 - Commit 2 ###
+* Worked on README.md formatting
+
 ### 11/27/13 - Commit 1 ###
 * Moved TODO out of README and into TODO
 * Converted README, TODO and CHANGELOG into Github MD formats
