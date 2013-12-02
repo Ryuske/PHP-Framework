@@ -67,7 +67,7 @@ class db
                 $this->_storeDB = new PDO('mysql:host=' . $this->sys->config->mysql_host . ';port=' . $this->sys->config->mysql_port . ';dbname=' . $this->sys->config->mysql_database, $this->sys->config->mysql_username, $this->sys->config->mysql_password);
                 $this->_storeDB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
             } catch(PDOException $e) {
-                $sys->error->trigger_error($e->getMessage(), 'Database');
+                $this->sys->error->trigger_error($e->getMessage(), 'Database');
             }
         }
 
@@ -100,7 +100,7 @@ class db
                             $prepared_statement->bindValue($binding, $value['value'], $value['dataType'], (int)$value['length']);
                             break;
                         default:
-                            $sys->error->trigger_error('There was an error with the query bindings', 'Database');
+                            $this->sys->error->trigger_error('There was an error with the query bindings', 'Database');
                             break;
                         }
                     } else {

@@ -1,3 +1,6 @@
+### 12/2/13 - Commit 1 ###
+* Made it so that token arrays work (i.e. {foo[0]} returns 'bar')
+
 ### 11/27/13 - Commit 5 ###
 * Rename $system_di to $sys
 * Changed the way $sys is passed to new classes. Hopefully reducing the RECURSIVE array deal on dumps

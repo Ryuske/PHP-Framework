@@ -3,7 +3,7 @@
  * @Author: Kenyon Haliwell
  * @URL: http://khdev.net/
  * @Date Created: 2/22/11
- * @Date Modified: 11/27/13
+ * @Date Modified: 10/2/13
  * @Purpose: Template class used to parse views
  * @Version: 2
  */
@@ -94,8 +94,15 @@ class template
 
         if (!isset($_404)) {
           foreach($this->_variables as $key => $value) {
+              if (is_array($value)) {
+                $$key = $value;
+                $tokens[$key] = $$key;
+              }
+              
               $$key = $value;
-              $tokens[] = $key;
+              if (!is_object($$key)) {
+                $tokens[] = $key;
+              }
           }
 
           ob_start();
@@ -104,9 +111,29 @@ class template
           ob_end_clean();
 
           if (!empty($tokens)) {
-              foreach ($tokens as $token) {
-                  if (!is_object($$token)) {
-                    $view_contents = str_replace('{' . $token . '}', (string)$$token, $view_contents);
+               foreach ($tokens as $key=>$token) {
+                  preg_match_all("({.*})", $view_contents, $matches);
+                  $matches = (is_array($matches[0])) ? $matches[0]: $matches;
+                  foreach ($matches as $match) {
+                    $token_string = str_replace(array('{', '}'), '', $match);
+                    preg_match("(\[.*\])", $token_string, $array_match);
+                    
+                    if (0 < count($array_match)) {
+                        $variable = $token;
+                        
+                        if (0 < count($array_match)) {
+                            $array_match = explode('][', $array_match[0]);
+                            array_reverse($array_match);
+                            foreach ($array_match as $item) {
+                                $item = str_replace(array('[', ']', '\''), '', $item);
+                                $variable = (array_key_exists($item, $variable)) ? $variable[$item] : '';
+                            }
+                            
+                            $view_contents = str_replace($match, $variable, $view_contents);
+                        }
+                    } elseif (!is_array($token) && !is_object($$token)) {
+                        $view_contents = str_replace('{' . $token . '}', (string) $$token, $view_contents);
+                    }
                   }
               }
           }
@@ -120,4 +147,5 @@ class template
         }
     }//End parse
 }//End template
+
 //End File
