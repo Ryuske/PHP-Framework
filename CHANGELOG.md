@@ -1,5 +1,6 @@
-### 12/2/13 - Commit 1 ###
+### 12/2/13 - Commit 1-2 ###
 * Made it so that token arrays work (i.e. {foo[0]} returns 'bar')
+* Bugfixes with token arrays
 
 ### 11/27/13 - Commit 5 ###
 * Rename $system_di to $sys

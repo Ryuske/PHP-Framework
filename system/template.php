@@ -112,24 +112,31 @@ class template
 
           if (!empty($tokens)) {
                foreach ($tokens as $key=>$token) {
-                  preg_match_all("({.*})", $view_contents, $matches);
+                  preg_match_all("/({.*})/iUs", $view_contents, $matches);
                   $matches = (is_array($matches[0])) ? $matches[0]: $matches;
                   foreach ($matches as $match) {
                     $token_string = str_replace(array('{', '}'), '', $match);
-                    preg_match("(\[.*\])", $token_string, $array_match);
+                    preg_match_all("/\[.*\]/iUs", $token_string, $array_match);
+                    preg_match_all("/[^\[]*/", $token_string, $array_to_check);
                     
-                    if (0 < count($array_match)) {
+                    if (!empty($array_match[0]) && is_array($token) && $array_to_check[0][0] == $key) {
                         $variable = $token;
+                        $array_match = $array_match[0];
                         
-                        if (0 < count($array_match)) {
-                            $array_match = explode('][', $array_match[0]);
-                            array_reverse($array_match);
-                            foreach ($array_match as $item) {
-                                $item = str_replace(array('[', ']', '\''), '', $item);
-                                $variable = (array_key_exists($item, $variable)) ? $variable[$item] : '';
+                        foreach ($array_match as $item) {
+                            $item = str_replace(array('[', ']', '\''), '', $item);
+
+                            if (is_array($variable) && array_key_exists($item, $variable)) {
+                                $variable = $variable[$item];
                             }
-                            
+                        }
+                        
+                        if ('dev' === __PROJECT_ENVIRONMENT && is_array($variable)) {
+                            $view_contents = str_replace($match, print_r($variable, True), $view_contents);
+                        } elseif (!is_array($variable)) {
                             $view_contents = str_replace($match, $variable, $view_contents);
+                        } else {
+                            $view_contents = str_replace($match, '', $view_contents);
                         }
                     } elseif (!is_array($token) && !is_object($$token)) {
                         $view_contents = str_replace('{' . $token . '}', (string) $$token, $view_contents);
