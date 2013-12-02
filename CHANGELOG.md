@@ -1,3 +1,7 @@
+### 12/2/13 - Commit 3 ###
+* Fixed tabs in system files
+* Removed out-dated code
+
 ### 12/2/13 - Commit 1-2 ###
 * Made it so that token arrays work (i.e. {foo[0]} returns 'bar')
 * Bugfixes with token arrays
