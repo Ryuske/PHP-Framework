@@ -3,7 +3,7 @@
 * @Author: Kenyon Haliwell
 * @URL: http://khdev.net/
 * @Date Created: 2/21/11
-* @Date Modified: 12/2/13
+* @Date Modified: 12/3/13
 * @Purpose: Used to load the appropriate controller
 * @Version: 2
 */
@@ -13,7 +13,7 @@
 *
 * USAGE:
 *  initialize the router
-*      $sys->router = new router($sys);
+*      $sys->router = new router();
 *
 *  initialize the controller path
 *      $sys->router->controller_path(__SITE_PATH . 'controller');
@@ -22,12 +22,6 @@
 *      $sys->router->load_route();
 */
 class router {
-  /**
-  * @Var: Object
-  * @Access: Public
-  */
-  public $sys;
-  
   /**
   * @Var: String
   * @Access: Private

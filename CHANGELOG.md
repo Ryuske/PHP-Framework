@@ -1,3 +1,7 @@
+### 12/3/13 - Commit 3 ###
+* Updated file datestamps
+* Removed legacy code from system/router.php
+
 ### 12/3/13 - Commit 2 ###
 * Fixed some issues with system/router.php where it was adding a directory that shouldn't be there
 
