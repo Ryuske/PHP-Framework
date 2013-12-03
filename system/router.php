@@ -120,6 +120,7 @@ class router {
       && !is_dir(__APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . $directory)
     ) {
       $class = $directory;
+      $directory = '';
     } else { //If it was a directory, then loop through until we find the end of the directories
       foreach ($route_build as $next_in_route) {
         if (
@@ -204,7 +205,7 @@ class router {
         return false;
       } else {
         if (!is_readable($this->_fileName)) {
-          if (!is_readable($this->_fileName) /*&& is_readable($this->_sharedName)*/) {
+          if (is_readable($this->_sharedName)) {
             include_once $this->_sharedName;
           } else {
             return true;

@@ -1,3 +1,6 @@
+### 12/3/13 - Commit 2 ###
+* Fixed some issues with system/router.php where it was adding a directory that shouldn't be there
+
 ### 12/3/13 - Commit 1 ###
 * Forgot to update application/shared/controller/home.php & userErrors.php to use $this->sys instead of $this->system_di
 
