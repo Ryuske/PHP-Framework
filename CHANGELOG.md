@@ -1,3 +1,6 @@
+### 12/2/13 - Commit 4 ###
+* Added a default application/shared directory with example an example controller, model and view
+
 ### 12/2/13 - Commit 3 ###
 * Fixed tabs in system files
 * Removed out-dated code
