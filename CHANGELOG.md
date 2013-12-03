@@ -1,3 +1,6 @@
+### 12/3/13 - Commit 1 ###
+* Forgot to update application/shared/controller/home.php & userErrors.php to use $this->sys instead of $this->system_di
+
 ### 12/2/13 - Commit 4 ###
 * Added a default application/shared directory with example an example controller, model and view
 
