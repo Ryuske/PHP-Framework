@@ -1,3 +1,6 @@
+### 12/3/13 - Commit 4 ###
+* Removed legacy code & updated USAGE example from system/db.php
+
 ### 12/3/13 - Commit 3 ###
 * Updated file datestamps
 * Removed legacy code from system/router.php

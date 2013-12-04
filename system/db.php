@@ -15,19 +15,13 @@
  *
  * USAGE:
  *  initialize the router
- *      $sys->db = new db($sys);
+ *      $sys->db = new db();
  *
- * 	$results = Db::query('SELECT * FROM users WHERE username=:user AND email=:email', array('user' => $user, 'email' => $email));
+ * 	$results = $sys->db->query('SELECT * FROM users WHERE username=:user AND email=:email', array('user' => $user, 'email' => $email));
  *
  * Any PDO query format is acceptable (http://php.net/pdo.prepare)
  */
 class db {
-  /**
-  * @Var: Object
-  * @Access: Public
-  */
-  public $sys;
-  
   /**
   * @Var Object
   * @Access: Private
