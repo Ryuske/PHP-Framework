@@ -1,3 +1,7 @@
+### 12/4/13 - Commit 4 ###
+* Pushed documentation to wiki
+* Wrote documentation
+
 ### 12/4/13 - Commit 2-3 ###
 * Broke system/template.php->parse() into multiple methods
 * Fixed some potentional bugs with not pre-definiting class-scope $sys variable
