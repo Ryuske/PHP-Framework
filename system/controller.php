@@ -30,7 +30,8 @@ abstract class controller {
   * @Param: object $sys
   * @Access: Public
   */
-  public function __construct($sys) {
+  public function __construct() {
+    global $sys;
     $this->sys = $sys;
   }//End __construct
   

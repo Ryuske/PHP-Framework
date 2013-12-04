@@ -23,9 +23,21 @@
 class template {
   /**
   * @Var: Object
-  * @Access: Public
+  * @Access: Protected
   */
-  public $sys;
+  protected $sys;
+  
+  /**
+  * @Var: String
+  * @Access: Private
+  */
+  private $_path_to_view = '';
+  
+  /**
+  * @Var: String
+  * @Access: Boolean
+  */
+  private $_404 = false;
   
   /**
   * @Var: Array
@@ -74,6 +86,26 @@ class template {
   * @Return: HTML contents of view, or true
   */
   public function parse($view, $return=false) {
+    $this->view_path($view);
+
+    if (!$this->_404) {
+      $view_html = $this->parse_tokens();
+      
+      if (true === $return) {
+        return $view_html;
+      } else {
+        echo $view_html;
+        return true;
+      }
+    }
+  }//End parse
+  
+  /**
+  * @Purpose: Figure out view to load
+  * @Param: (string) $view
+  * @Access: Protected
+  */
+  protected function view_path($view) {
     $view = str_replace('_', DIRECTORY_SEPARATOR, $view);
     $path_to_view = __SITE_PATH . 'view' . DIRECTORY_SEPARATOR . $view . '.php';
     
@@ -82,74 +114,76 @@ class template {
       if (!is_readable($path_to_shared_view)) {
         $pseudo_controller = NULL;
         $this->sys->router->call_404($pseudo_controller, 'view');
-        $_404 = true;
+        $this->_404 = true;
       } else {
         $path_to_view = $path_to_shared_view;
       }
     }
     
-    if (!isset($_404)) {
-      foreach($this->_variables as $key => $value) {
-        if (is_array($value)) {
-          $$key = $value;
-          $tokens[$key] = $$key;
-        }
-        
+    $this->_path_to_view = $path_to_view;
+  } //End view_path
+  
+  /**
+  * @Purpose: Parse tokens out of view
+  * @Access: Protected
+  * @Return: HTML contents of view
+  */
+  protected function parse_tokens() {
+    ob_start();
+    include_once $this->_path_to_view;
+    $view_html = ob_get_contents();
+    ob_end_clean();
+    
+    foreach($this->_variables as $key => $value) {
+      if (is_array($value)) {
         $$key = $value;
-        
-        if (!is_object($$key)) {
-          $tokens[] = $key;
-        }
+        $tokens[$key] = $$key;
       }
       
-      ob_start();
-      include_once $path_to_view;
-      $view_contents = ob_get_contents();
-      ob_end_clean();
+      $$key = $value;
       
-      if (!empty($tokens)) {
-        foreach ($tokens as $key=>$token) {
-          preg_match_all("/({.*})/iUs", $view_contents, $matches);
-          $matches = (is_array($matches[0])) ? $matches[0]: $matches;
-          foreach ($matches as $match) {
-            $token_string = str_replace(array('{', '}'), '', $match);
-            preg_match_all("/\[.*\]/iUs", $token_string, $array_match);
-            preg_match_all("/[^\[]*/", $token_string, $array_to_check);
+      if (!is_object($$key)) {
+        $tokens[] = $key;
+      }
+    }
+    
+    if (!empty($tokens)) {
+      foreach ($tokens as $key=>$token) {
+        preg_match_all("/({.*})/iUs", $view_html, $matches);
+        $matches = (is_array($matches[0])) ? $matches[0]: $matches;
+        foreach ($matches as $match) {
+          $token_string = str_replace(array('{', '}'), '', $match);
+          preg_match_all("/\[.*\]/iUs", $token_string, $array_match);
+          preg_match_all("/[^\[]*/", $token_string, $array_to_check);
+          
+          if (!empty($array_match[0]) && is_array($token) && $array_to_check[0][0] == $key) {
+            $variable = $token;
+            $array_match = $array_match[0];
             
-            if (!empty($array_match[0]) && is_array($token) && $array_to_check[0][0] == $key) {
-              $variable = $token;
-              $array_match = $array_match[0];
-              
-              foreach ($array_match as $item) {
-                $item = str_replace(array('[', ']', '\''), '', $item);
-              
-                if (is_array($variable) && array_key_exists($item, $variable)) {
-                  $variable = $variable[$item];
-                }
+            foreach ($array_match as $item) {
+              $item = str_replace(array('[', ']', '\''), '', $item);
+            
+              if (is_array($variable) && array_key_exists($item, $variable)) {
+                $variable = $variable[$item];
               }
-              
-              if ('dev' === __PROJECT_ENVIRONMENT && is_array($variable)) {
-                $view_contents = str_replace($match, print_r($variable, True), $view_contents);
-              } elseif (!is_array($variable)) {
-                $view_contents = str_replace($match, $variable, $view_contents);
-              } else {
-                $view_contents = str_replace($match, '', $view_contents);
-              }
-            } elseif (!is_array($token) && !is_object($$token)) {
-              $view_contents = str_replace('{' . $token . '}', (string) $$token, $view_contents);
             }
+            
+            if ('dev' === __PROJECT_ENVIRONMENT && is_array($variable)) {
+              $view_html = str_replace($match, print_r($variable, True), $view_html);
+            } elseif (!is_array($variable)) {
+              $view_html = str_replace($match, $variable, $view_html);
+            } else {
+              $view_html = str_replace($match, '', $view_html);
+            }
+          } elseif (!is_array($token) && !is_object($$token)) {
+            $view_html = str_replace('{' . $token . '}', (string) $$token, $view_html);
           }
         }
       }
-      
-      if (true === $return) {
-        return $view_contents;
-      } else {
-        echo $view_contents;
-        return true;
-      }
     }
-  }//End parse
+    
+    return $view_html;
+  } //End parse_tokens
 }//End template
 
 //End File

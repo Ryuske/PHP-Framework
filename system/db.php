@@ -23,6 +23,12 @@
  */
 class db {
   /**
+  * @Var: Object
+  * @Access: Protected
+  */
+  protected $sys;
+  
+  /**
   * @Var Object
   * @Access: Private
   */

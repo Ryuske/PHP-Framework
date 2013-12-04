@@ -1,3 +1,7 @@
+### 12/4/13 - Commit 2 ###
+* Broke system/template.php->parse() into multiple methods
+* Fixed some potentional bugs with not pre-definiting class-scope $sys variable
+
 ### 12/4/13 - Commit 1 ###
 * Removed set() and get() from dependencyInjection
 * Removed inititalize() in favor of__construct() in system/dependencyInjection.php and system/configuration.php

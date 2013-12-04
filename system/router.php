@@ -23,6 +23,12 @@
 */
 class router {
   /**
+  * @Var: Object
+  * @Access: Protected
+  */
+  protected $sys;
+  
+  /**
   * @Var: String
   * @Access: Private
   */

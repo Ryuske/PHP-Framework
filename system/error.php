@@ -22,9 +22,9 @@
 class error {
   /**
   * @Var: Object
-  * @Access: Public
+  * @Access: Protected
   */
-  public $sys;
+  protected $sys;
   
   /**
   * @Purpose: Load dependencyInjector into scope
