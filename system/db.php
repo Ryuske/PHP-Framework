@@ -3,9 +3,9 @@
  * @Author: Kenyon Haliwell
  * @URL: http://khdev.net/
  * @Date Created: 3/4/11
- * @Date Modified: 12/2/13
+ * @Date Modified: 12/4/13
  * @Purpose: Handle database connections
- * @Version: 2
+ * @Version: 2.5
  *
  * Database handling using PDO
  */

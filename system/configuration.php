@@ -3,9 +3,9 @@
 * @Author: Kenyon Haliwell
 * @URL: http://khdev.net/
 * @Date Created: 2/20/11
-* @Date Modified: 12/2/13
+* @Date Modified: 12/4/13
 * @Purpose: Implements site configurations into objects usable by the framework
-* @Version: 2
+* @Version: 2.5
 */
 
 /**
@@ -17,39 +17,24 @@
 *
 *  Getting values
 *      echo $sys->config->some_value;
-*
-*  TODO: Add support for multidimensional arrays
+*      echo $sys->config->some_array['array_key'];
 */
 class configuration {
-  /**
-  * @Var: Object
-  * @Access: Private
-  * @Static
-  */
-  public static $_configInstance;
-  
-  /**
-  * @Var: String
-  * @Access: Private
-  * @Static
-  */
-  public static $_configFile;
-  
   /**
   * @Var: Array
   * @Access: Private
   * @Static
   */
-  public static $_configValues;
+  public $_configValues;
   
   /**
-  * @Purpose: Privare constructor: only allow 1 instance
+  * @Purpose: Private constructor: only allow 1 instance
   * @Access: Private
   * @Final
   */
-  public final function __construct() {
+  public final function __construct($config_file) {
     $shared_configValues = __CONFIG_PATH . 'shared.php';
-    $site_configValues = __CONFIG_PATH . self::$_configFile . '.php';
+    $site_configValues = __CONFIG_PATH . $config_file . '.php';
     if (is_readable($shared_configValues)) {
       $shared_configValues = include_once $shared_configValues;
     } else {
@@ -61,7 +46,7 @@ class configuration {
       $site_configValues = array();
     }
     if (is_array($shared_configValues) || is_array($site_configValues) ) {
-      self::$_configValues = array_merge($shared_configValues, $site_configValues);
+      $this->_configValues = array_merge($shared_configValues, $site_configValues);
     } else {
       if ('dev' === __PROJECT_ENVIRONMENT) {
           echo '<fieldset class="system_alert"><legend>Config Error</legend>Error Loading Config Files<hr />' . $shared_configValues . ' or ' . $site_configValues . '</fieldset>';
@@ -83,34 +68,8 @@ class configuration {
   * @Return: If found, return the referenced value, otherwise null
   */
   public function __get($key) {
-    return array_key_exists($key, self::$_configValues) ? self::$_configValues[$key] : NULL;
+    return array_key_exists($key, $this->_configValues) ? $this->_configValues[$key] : NULL;
   }//End __get
-  
-  /**
-  * @Purpose: Initialize unique instance of $_configInstance
-  * @Access: Public
-  * @Access: Static
-  * @Return: Object $_configInstance
-  */
-  public static function initialize() {
-    if (NULL === self::$_configInstance) {
-      $class = __CLASS__;
-      self::$_configInstance = new $class;
-    }
-    
-    return self::$_configInstance;
-  }//End initialize
-  
-  /**
-  * @Purpose: Set the path location of the config file
-  * @Access: Public
-  * @Access: Static
-  * @Return: True
-  */
-  public static function set_file($file_name) {
-    self::$_configFile = $file_name;
-    return true;
-  }//End set_file
   
   /**
   * @Purpose: Used for debugging, print out everything stored in $_configValues
@@ -118,7 +77,7 @@ class configuration {
   */
   public function dump() {
     if ('dev' === __PROJECT_ENVIRONMENT) {
-      echo '<fieldset class="system_alert"><legend>Current Config Values</legend><pre>', print_r(self::$_configValues, true), '</pre></fieldset>';
+      echo '<fieldset class="system_alert"><legend>Current Config Values</legend><pre>', print_r($this->_configValues, true), '</pre></fieldset>';
     }
   }//End dump
 }//End configuration

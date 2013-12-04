@@ -1,3 +1,8 @@
+### 12/4/13 - Commit 1 ###
+* Removed set() and get() from dependencyInjection
+* Removed inititalize() in favor of__construct() in system/dependencyInjection.php and system/configuration.php
+* Pushed framework to version 2.5
+
 ### 12/3/13 - Commit 4 ###
 * Removed legacy code & updated USAGE example from system/db.php
 

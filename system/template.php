@@ -3,9 +3,9 @@
  * @Author: Kenyon Haliwell
  * @URL: http://khdev.net/
  * @Date Created: 2/22/11
- * @Date Modified: 12/2/13
+ * @Date Modified: 12/4/13
  * @Purpose: Template class used to parse views
- * @Version: 2
+ * @Version: 2.5
  */
 
 /**
