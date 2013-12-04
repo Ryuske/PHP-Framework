@@ -1,4 +1,4 @@
-### 12/4/13 - Commit 2 ###
+### 12/4/13 - Commit 2-3 ###
 * Broke system/template.php->parse() into multiple methods
 * Fixed some potentional bugs with not pre-definiting class-scope $sys variable
 
