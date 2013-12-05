@@ -1,3 +1,6 @@
+### 12/5/13 - Commit 3 ###
+* Fixed issue in system/template.php where it threw error array to string
+
 ### 12/5/13 - Commit 2 ###
 * Fixing .gitignore - making repos play nice with each other
 

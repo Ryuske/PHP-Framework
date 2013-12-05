@@ -26,25 +26,25 @@ class template {
   * @Access: Protected
   */
   protected $sys;
-  
+
   /**
   * @Var: String
   * @Access: Private
   */
   private $_path_to_view = '';
-  
+
   /**
   * @Var: String
   * @Access: Boolean
   */
   private $_404 = false;
-  
+
   /**
   * @Var: Array
   * @Access: Private
   */
   private $_variables = array();
-  
+
   /**
   * @Purpose: Load dependencyInjector into scope
   * @Param: object $sys
@@ -54,7 +54,7 @@ class template {
     global $sys;
     $this->sys = $sys;
   }//End __construct
-  
+
   /**
   * @Purpose: Enables object-like ability to set variables
   * @Param: string $key
@@ -64,20 +64,20 @@ class template {
   public function __set($key, $value) {
     $this->_variables[$key] = $value;
   }//End __set
-  
+
   /**
   * @Purpose: Enabled object-like ability to get variables
   * @Param: string $key
   * @Acess: Public
   */
   public function __get($key) {
-    if (array_key_exists($key, $this->_variables)) {    
+    if (array_key_exists($key, $this->_variables)) {
       return $this->_variables[$key];
     }
-    
+
     return '';
   } //End __get
-  
+
   /**
   * @Purpose: Parse the view
   * @Param: string $view
@@ -90,7 +90,7 @@ class template {
 
     if (!$this->_404) {
       $view_html = $this->parse_tokens();
-      
+
       if (true === $return) {
         return $view_html;
       } else {
@@ -99,7 +99,7 @@ class template {
       }
     }
   }//End parse
-  
+
   /**
   * @Purpose: Figure out view to load
   * @Param: (string) $view
@@ -108,7 +108,7 @@ class template {
   protected function view_path($view) {
     $view = str_replace('_', DIRECTORY_SEPARATOR, $view);
     $path_to_view = __SITE_PATH . 'view' . DIRECTORY_SEPARATOR . $view . '.php';
-    
+
     if (!is_readable($path_to_view)) {
       $path_to_shared_view = __APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . $view . '.php';
       if (!is_readable($path_to_shared_view)) {
@@ -119,10 +119,10 @@ class template {
         $path_to_view = $path_to_shared_view;
       }
     }
-    
+
     $this->_path_to_view = $path_to_view;
   } //End view_path
-  
+
   /**
   * @Purpose: Parse tokens out of view
   * @Access: Protected
@@ -133,20 +133,20 @@ class template {
     include_once $this->_path_to_view;
     $view_html = ob_get_contents();
     ob_end_clean();
-    
+
     foreach($this->_variables as $key => $value) {
       if (is_array($value)) {
         $$key = $value;
         $tokens[$key] = $$key;
       }
-      
+
       $$key = $value;
-      
+
       if (!is_object($$key)) {
         $tokens[] = $key;
       }
     }
-    
+
     if (!empty($tokens)) {
       foreach ($tokens as $key=>$token) {
         preg_match_all("/({.*})/iUs", $view_html, $matches);
@@ -155,19 +155,19 @@ class template {
           $token_string = str_replace(array('{', '}'), '', $match);
           preg_match_all("/\[.*\]/iUs", $token_string, $array_match);
           preg_match_all("/[^\[]*/", $token_string, $array_to_check);
-          
+
           if (!empty($array_match[0]) && is_array($token) && $array_to_check[0][0] == $key) {
             $variable = $token;
             $array_match = $array_match[0];
-            
+
             foreach ($array_match as $item) {
               $item = str_replace(array('[', ']', '\''), '', $item);
-            
+
               if (is_array($variable) && array_key_exists($item, $variable)) {
                 $variable = $variable[$item];
               }
             }
-            
+
             if ('dev' === __PROJECT_ENVIRONMENT && is_array($variable)) {
               $view_html = str_replace($match, print_r($variable, True), $view_html);
             } elseif (!is_array($variable)) {
@@ -175,13 +175,13 @@ class template {
             } else {
               $view_html = str_replace($match, '', $view_html);
             }
-          } elseif (!is_array($token) && !is_object($$token)) {
+          } elseif (!is_array($token) && !is_array($$token) && !is_object($$token)) {
             $view_html = str_replace('{' . $token . '}', (string) $$token, $view_html);
           }
         }
       }
     }
-    
+
     return $view_html;
   } //End parse_tokens
 }//End template
