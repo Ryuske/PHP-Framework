@@ -3,7 +3,7 @@
  * @Author: Kenyon Haliwell
  * @URL: http://khdev.net/
  * @Date Created: 2/21/11
- * @Date Modified: 3/5/11
+ * @Date Modified: 12/3/13
  * @Purpose: Default controller for a website
  * @Version: 1.0
  */
@@ -24,11 +24,11 @@ class home extends controller
         $hellowWorld = $this->load_model('helloWorld');
 
         //Sets a template variable (used via {} inside a view)
-        $this->system_di->template->helloWorld = $hellowWorld->helloWorld();
-        $this->system_di->template->title = 'Some Title';
+        $this->sys->template->helloWorld = $hellowWorld->helloWorld();
+        $this->sys->template->title = 'Some Title';
 
         //Parses the HTML from the view
-        $this->system_di->template->parse('main');
+        $this->sys->template->parse('main');
     }//End index
 }//End home
 

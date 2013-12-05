@@ -1,3 +1,6 @@
+### 12/5/13 - Commit 1 ###
+* Messed up applications/shared/controller files and they werent in the right directory
+
 ### 12/4/13 - Commit 4 ###
 * Pushed documentation to wiki
 * Wrote documentation
