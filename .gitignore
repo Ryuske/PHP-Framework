@@ -1,3 +1,11 @@
 application/kenyonhaliwell.com
 application/kenyonhaliwell.com/*
 configuration/kenyonhaliwell.com.php
+
+plugins
+plugins/*
+
+application/bbd.dev
+application/example.com
+
+configuration/bbd.dev.php
