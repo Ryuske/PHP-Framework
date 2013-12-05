@@ -1,3 +1,6 @@
+### 12/5/13 - Commit 1 ###
+* Removed TODO.md in favor of GitHub Issues
+
 ### 12/5/13 - Commit 3 ###
 * Fixed issue in system/template.php where it threw error array to string
 
