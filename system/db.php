@@ -40,11 +40,10 @@ class db {
   * @Access: Public
   * @Final
   */
-  final public function __construct()
-  {
-  global $sys;
-  $this->sys = $sys;
-  $this->initialize();
+  final public function __construct() {
+    global $sys;
+    $this->sys = $sys;
+    $this->initialize();
   }//End __construct
   
   /**
@@ -63,7 +62,7 @@ class db {
     if (NULL === $this->_storeDB) {
       try {
         $this->_storeDB = new PDO('mysql:host=' . $this->sys->config->mysql_host . ';port=' . $this->sys->config->mysql_port . ';dbname=' . $this->sys->config->mysql_database, $this->sys->config->mysql_username, $this->sys->config->mysql_password);
-        $this->_storeDB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+        $this->_storeDB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       } catch(PDOException $e) {
         $this->sys->error->trigger_error($e->getMessage(), 'Database');
       }
@@ -103,19 +102,27 @@ class db {
             $prepared_statement->bindValue($binding, $value);
           }
         }
-        
+
         $prepared_statement->execute();
+        
         if (strtolower(substr($query, 0, 6)) === 'select') {
-          return $prepared_statement->fetchAll();
+          return (false !== $prepared_statement) ? $prepared_statement->fetchAll() : false;
         }
       } elseif(strtolower(substr($query, 0, 6)) === 'select') {
         $fetch_rows = $this->_storeDB->query($query);
-        return $fetch_rows->fetchAll();
+        return (false !== $fetch_rows) ? $fetch_rows->fetchAll() : false;
       } else {
         return $this->_storeDB->exec($query);
       }
     } catch (PDOException $e) {
-      $sys->error->trigger_error($e->getMessage(), 'Database');
+      $errorCode = explode(':', $e->getMessage());
+      $errorCode = str_replace(array('SQLSTATE[', ']'), '', $errorCode[0]);
+        
+      if ('42S02' === $this->_storeDB->errorCode() || '42S02' === $errorCode) {
+        return false;  
+      } else {
+        $this->sys->error->trigger_error($e->getMessage(), 'Database');
+      }
     }
   }//End query
   
