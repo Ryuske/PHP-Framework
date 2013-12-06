@@ -1,4 +1,7 @@
-### 12/5/13 - Commit 1 ###
+### 12/5/13 - Commit 5 ###
+* Added the ability to load traits
+
+### 12/5/13 - Commit 4 ###
 * Removed TODO.md in favor of GitHub Issues
 
 ### 12/5/13 - Commit 3 ###

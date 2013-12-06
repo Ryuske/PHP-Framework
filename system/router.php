@@ -3,7 +3,7 @@
 * @Author: Kenyon Haliwell
 * @URL: http://khdev.net/
 * @Date Created: 2/21/11
-* @Date Modified: 12/4/13
+* @Date Modified: 12/5/13
 * @Purpose: Used to load the appropriate controller
 * @Version: 2.5
 */
@@ -283,6 +283,60 @@ class router {
       call_user_func_array(array($controller, $this->_routeAction), $this->_routeArguments);
     }
   }//End load_route
+  
+  /**
+  * @Purpose: Used to load traits into modules
+  * @Param: string $traits
+  * @Access: Public
+  * @Return: True
+  */
+  public function load_traits($traits, $path='') {
+    if (!empty($path)) {
+      $path = str_replace('_', DIRECTORY_SEPARATOR, $path);
+      $path .= DIRECTORY_SEPARATOR;
+    }
+    
+    $site_traits = __SITE_PATH . 'model' . DIRECTORY_SEPARATOR . $path . 'traits' . DIRECTORY_SEPARATOR;
+    $shared_traits = __APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'model' . DIRECTORY_SEPARATOR . $path . 'traits' . DIRECTORY_SEPARATOR;
+    
+    $this->check_traits($site_traits, $traits);
+    $this->check_traits($shared_traits, $traits);
+    
+    return true;
+  } //End load_traits
+  
+  /**
+  * @Purpose: Used to autoload traits & make sure they don't already exist
+  * @Param: string $file_path
+  * @Param: string $traits
+  * @Access: Protected
+  * @Return: Boolean
+  */
+  protected function check_traits($file_path, $traits) {
+    if (is_readable($file_path)) {
+      $files = scandir($file_path);
+    } else {
+      return false;
+    }
+    
+    if (is_array($files)) {
+      /*
+       * Get rid of '.' and '..' directories
+       */
+      array_shift($files);
+      array_shift($files);
+      
+      foreach ($files as $file) {
+        if (preg_match('/' . $traits . '/', $file) && !trait_exists(str_replace('.php', '', $file))) {
+          require_once $file_path . $file;
+        }
+      }
+    } else {
+      return false;
+    }
+    
+    return true;
+  } //End check_traits
 }//End router
 
 //End File
