@@ -1,6 +1,6 @@
 Author: Kenyon Haliwell
 
-Documentation: https://github.com/Ryuske/PHP-Framework/wiki/Lightweight-PHP-MVC-Framework
+Documentation: https://github.com/Ryuske/PHP-Framework/wiki
 
 Version: 2.5
 
