@@ -79,6 +79,15 @@ class template {
   } //End __get
 
   /**
+   * @Purpose: Enable checking if a variable is set or not
+   * @Param: string $key
+   * @Access: Public
+   */
+  public function __isset($key) {
+    return isset($this->_variables[$key]);
+  }
+  
+  /**
   * @Purpose: Parse the view
   * @Param: string $view
   * @Param: [Boolean $return]

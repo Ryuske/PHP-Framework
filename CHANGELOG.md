@@ -1,3 +1,6 @@
+### 12/9/13 - Commit 1 ###
+* Fixed issue with not being able to use empty() on $sys->template->my_var because __isset() wasn't being used
+
 ### 12/5/13 - Commit 5 ###
 * Added the ability to load traits
 
