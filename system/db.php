@@ -105,10 +105,10 @@ class db {
 
         $prepared_statement->execute();
         
-        if (strtolower(substr($query, 0, 6)) === 'select') {
+        if (strtolower(substr(trim($query), 0, 6)) === 'select') {
           return (false !== $prepared_statement) ? $prepared_statement->fetchAll() : false;
         }
-      } elseif(strtolower(substr($query, 0, 6)) === 'select') {
+      } elseif(strtolower(substr(trim($query), 0, 6)) === 'select') {
         $fetch_rows = $this->_storeDB->query($query);
         return (false !== $fetch_rows) ? $fetch_rows->fetchAll() : false;
       } else {

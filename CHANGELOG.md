@@ -1,3 +1,6 @@
+### 12/10/13 - Commit 1 ###
+* Fixed issue if there was trailing space in front of a database query on select
+
 ### 12/9/13 - Commit 1 ###
 * Fixed issue with not being able to use empty() on $sys->template->my_var because __isset() wasn't being used
 
