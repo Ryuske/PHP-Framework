@@ -1,3 +1,6 @@
+### 12/18/13 - Commit 1 ###
+* Changed system/router.php to load_helpers() instead of load_traits() so you can now load traits or interfaces
+
 ### 12/10/13 - Commit 1 ###
 * Fixed issue if there was trailing space in front of a database query on select
 

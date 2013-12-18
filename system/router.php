@@ -3,7 +3,7 @@
 * @Author: Kenyon Haliwell
 * @URL: http://khdev.net/
 * @Date Created: 2/21/11
-* @Date Modified: 12/5/13
+* @Date Modified: 12/18/13
 * @Purpose: Used to load the appropriate controller
 * @Version: 2.5
 */
@@ -286,33 +286,39 @@ class router {
   
   /**
   * @Purpose: Used to load traits into modules
-  * @Param: string $traits
+  * @Param: string $type
+  * @Param: string $group
+  * @Param: string $path
   * @Access: Public
   * @Return: True
   */
-  public function load_traits($traits, $path='') {
+  public function load_helpers($type='traits', $group, $path='') {
+    if (!in_array($type, array('traits', 'interfaces'))) {
+      return false;
+    }
+    
     if (!empty($path)) {
       $path = str_replace('_', DIRECTORY_SEPARATOR, $path);
       $path .= DIRECTORY_SEPARATOR;
     }
     
-    $site_traits = __SITE_PATH . 'model' . DIRECTORY_SEPARATOR . $path . 'traits' . DIRECTORY_SEPARATOR;
-    $shared_traits = __APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'model' . DIRECTORY_SEPARATOR . $path . 'traits' . DIRECTORY_SEPARATOR;
+    $site_helpers = __SITE_PATH . 'model' . DIRECTORY_SEPARATOR . $path . $type . DIRECTORY_SEPARATOR;
+    $shared_helpers = __APPLICATIONS_PATH . 'shared' . DIRECTORY_SEPARATOR . 'model' . DIRECTORY_SEPARATOR . $path . $type . DIRECTORY_SEPARATOR;
     
-    $this->check_traits($site_traits, $traits);
-    $this->check_traits($shared_traits, $traits);
+    $this->check_helpers($site_helpers, $group);
+    $this->check_helpers($shared_helpers, $group);
     
     return true;
-  } //End load_traits
+  } //End load_helpers
   
   /**
   * @Purpose: Used to autoload traits & make sure they don't already exist
   * @Param: string $file_path
-  * @Param: string $traits
+  * @Param: string $group
   * @Access: Protected
   * @Return: Boolean
   */
-  protected function check_traits($file_path, $traits) {
+  protected function check_helpers($file_path, $group) {
     if (is_readable($file_path)) {
       $files = scandir($file_path);
     } else {
@@ -327,7 +333,7 @@ class router {
       array_shift($files);
       
       foreach ($files as $file) {
-        if (preg_match('/' . $traits . '/', $file) && !trait_exists(str_replace('.php', '', $file))) {
+        if (preg_match('/' . $group . '/', $file) && !trait_exists(str_replace('.php', '', $file))) {
           require_once $file_path . $file;
         }
       }
@@ -336,7 +342,7 @@ class router {
     }
     
     return true;
-  } //End check_traits
+  } //End check_helpers
 }//End router
 
 //End File
