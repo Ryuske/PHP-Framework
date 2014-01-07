@@ -48,7 +48,7 @@ define('__APPLICATIONS_PATH', __BASE_PATH . 'application' . DIRECTORY_SEPARATOR)
 /**
  * Define the site path
  */
-define('__SITE_PATH', __APPLICATIONS_PATH . $_SERVER['HTTP_HOST'] . DIRECTORY_SEPARATOR);
+define('__SITE_PATH', __APPLICATIONS_PATH . str_replace('www.', '', $_SERVER['HTTP_HOST']) . DIRECTORY_SEPARATOR);
 
 /**
  * Figure out if error reporting should be turned on or off
@@ -74,7 +74,7 @@ $sys = new dependencyInjection();
 /**
  * Initialize site configuration
  */
-$sys->config = new configuration($_SERVER['HTTP_HOST']);
+$sys->config = new configuration(str_replace('www.', '', $_SERVER['HTTP_HOST']));
 
 /**
  * Initialize error handling

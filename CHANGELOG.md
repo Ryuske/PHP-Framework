@@ -1,3 +1,7 @@
+### 1/7/14 - Commit 1 ###
+* Strip www. from HTTP_HOST when loading the controllers and config files
+* Stripped information about config values from debug_backtrace() on error reporting
+
 ### 12/18/13 - Commit 1 ###
 * Changed system/router.php to load_helpers() instead of load_traits() so you can now load traits or interfaces
 

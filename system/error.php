@@ -56,6 +56,27 @@ class error {
   }//End debug_string_backtrace
   
   /**
+  * @Purpose: Allow debug__backtrace() to be used in a string
+  * @Access: Public
+  * @Return: Array containing backtrace information
+  */
+  public function debug_backtrace() {
+    $trace = debug_backtrace();
+    array_shift($trace);
+    $trace = print_r($trace, true);
+    $trace = preg_replace("/.config([^)])*/s", '', $trace);
+    
+    
+    /**
+    * Remove first backtrace, which is this function and reorder them to start from 0 again
+    */
+    //$trace = preg_replace ("/(.*)/", '', $trace);
+    //$trace = preg_replace ('/^#(\d+)/me', '\'#\' . ($1 - 1)', $trace);
+    
+    return $trace;
+  }//End debug_string_backtrace
+  
+  /**
   * @Purpose: Used to replace PHPs error handler
   * @Param: int $errno
   * @Param: mixed $errstr
@@ -96,7 +117,7 @@ class error {
   */
   public function trigger_error($error_message = NULL, $error_type = 'Undefined') {
     if ('dev' === __PROJECT_ENVIRONMENT) {
-      trigger_error('<fieldset class="system_alert"><legend>' . $error_type . ' Error</legend><pre>' . htmlentities($error_message, ENT_QUOTES, 'UTF-8', false) . '<hr /><h4>PHP Backtrace</h4>' . print_r(debug_backtrace(), true) . '<hr /><h4>PHP Functions Backtrace</h4>' . $this->debug_string_backtrace() . '</pre></fieldset>');
+      trigger_error('<fieldset class="system_alert"><legend>' . $error_type . ' Error</legend><pre>' . htmlentities($error_message, ENT_QUOTES, 'UTF-8', false) . '<hr /><h4>PHP Backtrace</h4>' . $this->debug_backtrace() . '<hr /><h4>PHP Functions Backtrace</h4>' . $this->debug_string_backtrace() . '</pre></fieldset>');
       return true;
     } else {
       echo '<fieldset class="system_alert"><legend>Error</legend>There was an error! Details have been email to the admin.</fieldset>';
