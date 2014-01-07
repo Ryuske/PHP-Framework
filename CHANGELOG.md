@@ -1,3 +1,6 @@
+### 1/7/14 - Commit 2 ###
+* Found a better way to handle errors in general
+
 ### 1/7/14 - Commit 1 ###
 * Strip www. from HTTP_HOST when loading the controllers and config files
 * Stripped information about config values from debug_backtrace() on error reporting
